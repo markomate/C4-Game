@@ -51,11 +51,14 @@ class C4Game
         @board = Board.new
         @player1 = Player.new("Player 1", :R, @board)
         @player2 = Player.new("Player 2", :Y, @board)
+        @current_player = @player1
 
         run
     end
     
     def run
         @board.render
+        @board.drop_piece(2, :●)
+        # @board.render
     end
 end
