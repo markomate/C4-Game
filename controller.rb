@@ -49,16 +49,32 @@ end
 class C4Game
     def initialize
         @board = Board.new
-        @player1 = Player.new("Player 1", :R, @board)
-        @player2 = Player.new("Player 2", :Y, @board)
+        @player1 = Player.new("Player 1", :●, @board)
+        @player2 = Player.new("Player 2", :○, @board)
         @current_player = @player1
 
         run
     end
-    
+    # method for running the game which is a loop
     def run
-        @board.render
-        @board.drop_piece(2, :●)
-        # @board.render
+        loop do
+            # display the board
+            @board.render
+            # get a move from the current player
+            @current_player.get_move
+            # check if move is a win and display a win message if it is
+            # check if move is a draw and display a draw message if it is
+            # change current player
+            change_turn(@current_player)
+        end
     end
+
+    def change_turn(current_player)
+        if current_player == @player1
+            @current_player = @player2
+        elsif current_player == @player2
+            @current_player = @player1
+        end
+      end
+
 end

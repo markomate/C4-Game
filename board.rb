@@ -35,8 +35,9 @@ class Board
 
   def drop_piece(coulmn, piece)
     x = coulmn
+    x -= 1
     if @board[5][x] == "O"
-       @board[5][x] = piece
+      @board[5][x] = piece
     elsif @board[4][x] == "O"
       @board[4][x] = piece
     elsif @board[3][x] == "O"
@@ -52,4 +53,16 @@ class Board
     end
   end
 
+  def check_room?(column)
+    x = column
+    x -= 1
+    @board[0][x] == "O" ? true : false
+  end
+
+  def check_move(column, piece)
+      if check_room?(column)
+      drop_piece(column, piece)
+      end
+  end
+  
 end
