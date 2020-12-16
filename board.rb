@@ -21,12 +21,15 @@ class Board
     ]
   end
 
+  # method for displaying the board to the player/s
   def render
+    # clears the screen before rendering
     system('clear')
+
     puts ' _____________'.colorize(:blue)
     @board.each do |x|
       print '|'.colorize(:blue)
-      # Loop over each cell in the row.
+      # loop over each cell in the row.
       x.each do |cell|
         if cell == :'1'
           print "●".colorize(@colour1)
@@ -39,10 +42,10 @@ class Board
         print '|'.colorize(:blue)
         end
       end
-      # End of row.
+      # end of row
       print "\n"
     end
-    
+    # loop for printing column numbers at the bottom
     i = 1
     loop do
       print "-".colorize(:blue)
@@ -54,7 +57,8 @@ class Board
       end
     end
   end
-
+  
+  # method for detecting the bottom empty slot and placing a piece
   def drop_piece(coulmn, piece)
     x = coulmn
     x -= 1
@@ -73,19 +77,31 @@ class Board
     end
   end
 
+  # checks if there is room in the column
   def check_room?(column)
     x = column
     x -= 1
     @board[0][x] == "O" ? true : false
   end
 
+  # method to place piece after confirming it is empty, returns true if placed or false if unable
   def check_move(column, piece)
       if check_room?(column)
         drop_piece(column, piece)
         true
       else
+        draw?
         puts "That column is full!"
         false
       end
+  end
+
+  def draw?
+    # checks board if there are any empty slots and returns true if board is full
+    if @board[0][0] != "O" && @board[0][1] != "O" && @board[0][2] != "O" && @board[0][3] != "O" && @board[0][4] != "O" && @board[0][5] != "O" && @board[0][6] != "O"
+      return true
+    else
+      false
+    end
   end
 end

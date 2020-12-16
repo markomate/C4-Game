@@ -38,6 +38,9 @@ class MainMenu
         if input == 3
             colour_selector
         end
+        if input == 4
+            exit
+        end
     end
 
     def colour_selector
@@ -70,6 +73,7 @@ class C4Game
             @current_player = @player1
         end
     end
+
     # method for running the game, which is a loop
     def run
         loop do
@@ -79,7 +83,7 @@ class C4Game
             @current_player.get_move
             # check if move is a win and display a win message if it is
             # check if move is a draw and display a draw message if it is
-
+            display_draw if @board.draw?
             # change current player
             change_turn(@current_player)
         end
@@ -94,4 +98,11 @@ class C4Game
         end
     end
 
+    def display_draw
+        @board.render
+        puts "\nIt's a draw!"
+        puts "Press any key to EXIT"
+        gets
+        exit
+    end
 end

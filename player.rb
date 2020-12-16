@@ -8,6 +8,7 @@ class Player
 
   end
 
+  # method for asking for a move, validating it is an option then returning user input
   def ask_move
     puts "\n#{@name} please enter a move:"
     input = gets.to_i
@@ -19,6 +20,7 @@ class Player
     end
   end
 
+  # method with a loop that breaks after checking the move with the board class
   def get_move(column = nil)
     loop do
       column = ask_move
@@ -29,7 +31,7 @@ class Player
   end
 end
 
-
+# Computer class which inherits stuff from the Player class
 class CPU < Player
   # method to randomly generate a move for now
   def generate_move
