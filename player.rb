@@ -5,7 +5,6 @@ class Player
     @name = name
     @piece = piece
     @board = board
-
   end
 
   # method for asking for a move, validating it is an option then returning user input
@@ -14,9 +13,9 @@ class Player
     input = gets.to_i
     input_valid = Validators.validate_column(input)
     if !input_valid
-      puts "Invalid input, try again!"
+      puts 'Invalid input, try again!'
       ask_move
-    else return input
+    else input
     end
   end
 
@@ -24,9 +23,7 @@ class Player
   def get_move(column = nil)
     loop do
       column = ask_move
-      if @board.check_move(column, @piece)
-        break
-      end
+      break if @board.check_move(column, @piece)
     end
   end
 end
@@ -35,7 +32,7 @@ end
 class CPU < Player
   # method to randomly generate a move for now
   def generate_move
-    return rand(1..7)
+    rand(1..7)
   end
 
   def ask_move
