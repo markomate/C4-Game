@@ -109,7 +109,8 @@ class Board
   def win?(piece)
     return true if four_in_row(piece)
     return true if four_in_column(piece)
-    # return true if four_in_diagonal(piece)
+    return true if four_acending_left(piece)
+    return true if four_acending_right(piece)
   end
 
   def four_in_row(piece)
@@ -145,4 +146,51 @@ class Board
     end
     return false
   end
+
+  def four_acending_left(piece)
+    row = 5
+    column = 6
+    piece_count = 0
+    while row < @board.size && row >= 0 && column < @board[row].size && column >= 0
+      if @board[row][column] == piece
+        piece_count += 1
+        column -= 1
+        row -= 1
+      else
+        piece_count = 0
+        column -= 1
+        if column < 3
+          row -= 1
+          column = 6
+        end
+      end
+        if piece_count == 4
+          return true
+        end
+    end
+  end
+
+  def four_acending_right(piece)
+    row = 5
+    column = 0
+    count = 0
+    while row < @board.size && row >= 0 && column < @board[row].size && column >= 0
+      if @board[row][column] == piece
+        count += 1
+        column += 1
+        row -= 1
+      else
+        count = 0
+        column += 1
+        if column > 3
+          row -= 1
+          column = 0
+        end
+      end
+        if count == 4
+          return true
+        end
+    end
+  end
+
 end
