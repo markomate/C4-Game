@@ -3,8 +3,10 @@ require 'colorize'
 class Board
   attr_accessor :board
 
-  def initialize
+  def initialize(colour1, colour2)
     @board = empty_board
+    @colour1 = colour1
+    @colour2 = colour2
   end
 
   # setting up the game board
@@ -27,35 +29,30 @@ class Board
       # Loop over each cell in the row.
       x.each do |cell|
         if cell == :'1'
-          print "●".colorize(:red)
+          print "●".colorize(@colour1)
           print '|'.colorize(:blue)
         elsif cell == :'2'
-          print "●".colorize(:yellow)
+          print "●".colorize(@colour2)
           print '|'.colorize(:blue)
         else
-        print "#{cell}".colorize(:blue)
+        print "○".colorize(:blue)
         print '|'.colorize(:blue)
         end
       end
       # End of row.
       print "\n"
     end
-    print "-".colorize(:blue)
-    print "1"
-    print "-".colorize(:blue)
-    print "2"
-    print "-".colorize(:blue)
-    print "3"
-    print "-".colorize(:blue)
-    print "4"
-    print "-".colorize(:blue)
-    print "5"
-    print "-".colorize(:blue)
-    print "6"
-    print "-".colorize(:blue)
-    print "7"
-    print "-".colorize(:blue)
-    puts ""
+    
+    i = 1
+    loop do
+      print "-".colorize(:blue)
+      print "#{i}"
+      i += 1
+      if i == 8
+        print "-".colorize(:blue)
+        break
+      end
+    end
   end
 
   def drop_piece(coulmn, piece)

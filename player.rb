@@ -5,10 +5,11 @@ class Player
     @name = name
     @piece = piece
     @board = board
+
   end
 
   def ask_move
-    puts "#{@name} please enter the number of the column:"
+    puts "\n#{@name} please enter a move:"
     input = gets.to_i
     input_valid = Validators.validate_column(input)
     if !input_valid

@@ -9,13 +9,23 @@ class GameView
   end
 
   def game_options
+    puts "\nSelect from the following options:"
     puts "\n1. Single Player"
     puts '2. Two Player (2P)'
-    puts '3. Resume from save'
+    puts '3. Colour Selection'
     puts '4. Exit'
   end
 
   def game_help
     puts 'How to play:'
+  end
+
+  def error_msg
+    puts 'Please enter a valid option!'
+  end
+
+  def colour_options
+    puts "\nYou may pick a colour by typing it's name - Black, Red, Green, Yellow, Blue, Magenta, Cyan and White."
+    puts "All the colours have a light variant, which you can choose by adding light_ infront of a colour, e.g. light_red"
   end
 end
