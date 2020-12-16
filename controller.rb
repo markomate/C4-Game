@@ -82,6 +82,7 @@ class C4Game
             # get a move from the current player
             @current_player.get_move
             # check if move is a win and display a win message if it is
+            display_win if @board.win?(@current_player.piece)
             # check if move is a draw and display a draw message if it is
             display_draw if @board.draw?
             # change current player
@@ -101,6 +102,14 @@ class C4Game
     def display_draw
         @board.render
         puts "\nIt's a draw!"
+        puts "Press any key to EXIT"
+        gets
+        exit
+    end
+
+    def display_win
+        @board.render
+        puts "\n{#@current_player} WINS!"
         puts "Press any key to EXIT"
         gets
         exit

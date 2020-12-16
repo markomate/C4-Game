@@ -104,4 +104,45 @@ class Board
       false
     end
   end
+
+  # method which contains all possible win methods
+  def win?(piece)
+    return true if four_in_row(piece)
+    return true if four_in_column(piece)
+    # return true if four_in_diagonal(piece)
+  end
+
+  def four_in_row(piece)
+    count = 0
+    @board.each do |x|
+      x.each do |cell|
+          if cell == piece
+            count += 1
+          else 
+            count = 0
+          end
+          if count == 4
+            return true
+          end
+        end
+      end
+    return false
+  end
+
+  def four_in_column(piece)
+    count = 0
+    for i in 0..6 do
+      @board.each_with_index do |value, index|
+        if @board[index][i] == piece
+          count += 1
+        else
+          count = 0
+        end
+        if count == 4
+          return true
+        end
+      end
+    end
+    return false
+  end
 end
