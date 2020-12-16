@@ -26,8 +26,16 @@ class Board
       print '|'.colorize(:blue)
       # Loop over each cell in the row.
       x.each do |cell|
-        print cell
+        if cell == :'1'
+          print "●".colorize(:red)
+          print '|'.colorize(:blue)
+        elsif cell == :'2'
+          print "●".colorize(:yellow)
+          print '|'.colorize(:blue)
+        else
+        print "#{cell}".colorize(:blue)
         print '|'.colorize(:blue)
+        end
       end
       # End of row.
       print "\n"

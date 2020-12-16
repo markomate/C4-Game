@@ -25,13 +25,13 @@ class C4Game
         @board = Board.new
 
         if game_option == 1
-            @player1 = Player.new("Player 1", :●, @board)
-            @player2 = CPU.new("Player 2", :○, @board)
+            @player1 = Player.new("Player 1", :'1', @board)
+            @player2 = CPU.new("Player 2", :'2', @board)
             @current_player = @player2
         
         else
-            @player1 = Player.new("Player 1", :●, @board)
-            @player2 = Player.new("Player 2", :○, @board)
+            @player1 = Player.new("Player 1", :'1', @board)
+            @player2 = Player.new("Player 2", :'2', @board)
             @current_player = @player1
         end
     end
