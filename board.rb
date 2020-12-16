@@ -1,3 +1,5 @@
+require 'colorize'
+
 class Board
   attr_accessor :board
 
@@ -19,18 +21,33 @@ class Board
 
   def render
     system('clear')
-    puts ' _____________'
+    puts ' _____________'.colorize(:blue)
     @board.each do |x|
-      print '|'
+      print '|'.colorize(:blue)
       # Loop over each cell in the row.
       x.each do |cell|
         print cell
-        print '|'
+        print '|'.colorize(:blue)
       end
       # End of row.
       print "\n"
     end
-    puts '-1-2-3-4-5-6-7-'
+    print "-".colorize(:blue)
+    print "1"
+    print "-".colorize(:blue)
+    print "2"
+    print "-".colorize(:blue)
+    print "3"
+    print "-".colorize(:blue)
+    print "4"
+    print "-".colorize(:blue)
+    print "5"
+    print "-".colorize(:blue)
+    print "6"
+    print "-".colorize(:blue)
+    print "7"
+    print "-".colorize(:blue)
+    puts ""
   end
 
   def drop_piece(coulmn, piece)
@@ -48,8 +65,6 @@ class Board
       @board[1][x] = piece
     elsif @board[0][x] == "O"
       @board[0][x] = piece
-    else
-      puts "Enter a valid column"
     end
   end
 
@@ -61,8 +76,11 @@ class Board
 
   def check_move(column, piece)
       if check_room?(column)
-      drop_piece(column, piece)
+        drop_piece(column, piece)
+        true
+      else
+        puts "That column is full!"
+        false
       end
   end
-  
 end

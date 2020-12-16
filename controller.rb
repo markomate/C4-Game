@@ -1,3 +1,5 @@
+require './validators'
+
 class MainMenu
   def initialize(game_view)
     @game_view = game_view
@@ -6,42 +8,14 @@ class MainMenu
   def run
     def welcome
       @game_view.welcome_text
-      input = gets.chomp
+      input = gets.chomp.to_s
       if input == '-h'
         @game_view.game_help
       else
         puts "\nSelect from the following options:"
         @game_view.game_options
-        setup
       end
     end
-
-    def setup
-      input = gets.to_i
-      case input
-      when 1
-        return
-      when 2
-        two_player
-      when 3
-        resume_save
-      when 4
-        system('exit')
-      else
-        puts "\nPlease enter a valid option."
-        setup
-      end
-    end
-
-    def single_player
-      puts "\nPlease enter your name:"
-      input = gets.chomp.to_s
-    end
-
-    def two_player; end
-
-    def resume_save; end
-
     welcome
   end
 end
@@ -49,13 +23,19 @@ end
 class C4Game
     def initialize
         @board = Board.new
-        @player1 = Player.new("Player 1", :●, @board)
-        @player2 = Player.new("Player 2", :○, @board)
-        @current_player = @player1
 
-        run
+        if game_option == 1
+            @player1 = Player.new("Player 1", :●, @board)
+            @player2 = CPU.new("Player 2", :○, @board)
+            @current_player = @player2
+        
+        else
+            @player1 = Player.new("Player 1", :●, @board)
+            @player2 = Player.new("Player 2", :○, @board)
+            @current_player = @player1
+        end
     end
-    # method for running the game which is a loop
+    # method for running the game, which is a loop
     def run
         loop do
             # display the board
@@ -68,7 +48,16 @@ class C4Game
             change_turn(@current_player)
         end
     end
+    # method for determining which game type or to resume from save
+    def game_option
+        # prompt to start games and generate player/cpu
+        begin
+          input = gets.strip.to_i
+        end until input == 1 || input == 2
+        return input
+    end
 
+    # method for alternating players turn
     def change_turn(current_player)
         if current_player == @player1
             @current_player = @player2

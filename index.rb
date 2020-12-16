@@ -15,7 +15,8 @@ else
   main_menu = MainMenu.new(game_view)
   main_menu.run
 
-  if true
+
+  if 
     game_start = C4Game.new
     game_start.run
   end
