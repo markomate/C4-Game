@@ -22,8 +22,9 @@ class GameView
     puts "\nSelect from the following options:"
     puts "\n1. Single Player"
     puts '2. Two Player (2P)'
-    puts '3. Options'
-    puts '4. Exit'
+    puts '3. Load saved game'
+    puts '4. Options'
+    puts '5. Exit'
   end
 
   def game_help

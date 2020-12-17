@@ -1,4 +1,5 @@
 require 'colorize'
+require 'yaml'
 
 class Board
   attr_accessor :board
@@ -11,20 +12,18 @@ class Board
 
   # setting up the game board
   def empty_board
+    # loads saved array instead of empty if selected
     if $game_type == 3
-      saved_array = []
-      File.readlines('board.txt').map do |line|
-        saved_array << line.split.map(&:to_i)
-      end
+      saved_array = YAML.load(File.read("board.yml"))
       return saved_array
     else
     Array[
-      %w[O O O O O O O],
-      %w[O O O O O O O],
-      %w[O O O O O O O],
-      %w[O O O O O O O],
-      %w[O O O O O O O],
-      %w[O O O O O O O],
+      %w[0 0 0 0 0 0 0],
+      %w[0 0 0 0 0 0 0],
+      %w[0 0 0 0 0 0 0],
+      %w[0 0 0 0 0 0 0],
+      %w[0 0 0 0 0 0 0],
+      %w[0 0 0 0 0 0 0],
     ]
     end
   end
@@ -32,16 +31,7 @@ class Board
   # method for displaying the board to the player/s
   def render
     # saves the array into a txt file
-      File.write('board.txt', '')
-    for i in 0..5 do
-      File.open('board.txt', "a") {|w| w.write "#{@board[i]}\n"}
-    end
-    # File.open('board.txt', "w") {|i| i.write @board[1]}
-    # File.open('board.txt', "w") {|i| i.write @board[2]}
-    # File.open('board.txt', "w") {|i| i.write @board[3]}
-    # File.open('board.txt', "w") {|i| i.write @board[4]}
-    # File.open('board.txt', "w") {|i| i.write @board[5]}
-
+    File.open("board.yml", "w") { |file| file.write(@board.to_yaml) }
     # clears the screen before rendering
     system('clear')
     # iterates through every variable in the array
@@ -49,10 +39,10 @@ class Board
     @board.each do |x|
       print '|'.colorize(:blue)
       x.each do |cell|
-        if cell == :'1'
+        if cell == "1"
           print '●'.colorize(@colour1)
           print '|'.colorize(:blue)
-        elsif cell == :'2'
+        elsif cell == "2"
           print '●'.colorize(@colour2)
           print '|'.colorize(:blue)
         else
@@ -80,17 +70,17 @@ class Board
   def drop_piece(coulmn, piece)
     x = coulmn
     x -= 1
-    if @board[5][x] == 'O'
+    if @board[5][x] == "0"
       @board[5][x] = piece
-    elsif @board[4][x] == 'O'
+    elsif @board[4][x] == "0"
       @board[4][x] = piece
-    elsif @board[3][x] == 'O'
+    elsif @board[3][x] == "0"
       @board[3][x] = piece
-    elsif @board[2][x] == 'O'
+    elsif @board[2][x] == "0"
       @board[2][x] = piece
-    elsif @board[1][x] == 'O'
+    elsif @board[1][x] == "0"
       @board[1][x] = piece
-    elsif @board[0][x] == 'O'
+    elsif @board[0][x] == "0"
       @board[0][x] = piece
     end
   end
@@ -99,7 +89,9 @@ class Board
   def check_room?(column)
     x = column
     x -= 1
-    @board[0][x] == 'O'
+    if @board[0][x] == "0"
+      return true
+    end
   end
 
   # method to place piece after confirming it is empty, returns true if placed or false if unable
@@ -116,7 +108,7 @@ class Board
 
   def draw?
     # checks board if there are any empty slots and returns true if board is full
-    if @board[0][0] != 'O' && @board[0][1] != 'O' && @board[0][2] != 'O' && @board[0][3] != 'O' && @board[0][4] != 'O' && @board[0][5] != 'O' && @board[0][6] != 'O'
+    if @board[0][0] != "0" && @board[0][1] != "0" && @board[0][2] != "0" && @board[0][3] != "0" && @board[0][4] != "0" && @board[0][5] != "0" && @board[0][6] != "0"
       true
     else
       false

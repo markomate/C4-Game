@@ -11,10 +11,12 @@ if ARGV.length.positive?
   end
 else
   # run the code
-  game_view = GameView.new
-  main_menu = MainMenu.new(game_view)
-  main_menu.run
+  loop do
+    game_view = GameView.new
+    main_menu = MainMenu.new(game_view)
+    main_menu.run
 
-  game_start = C4Game.new
-  game_start.run
+    game_start = C4Game.new
+    game_start.run
+  end
 end

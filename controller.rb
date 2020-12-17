@@ -6,6 +6,7 @@ $colour2 = :yellow
 # default names
 $name1 = 'Player 1'
 $name2 = 'Player 2'
+$win = 0
 
 class MainMenu
   def initialize(game_view)
@@ -97,26 +98,36 @@ class C4Game
     @board = Board.new($colour1, $colour2)
     # single player mode
     if $game_type == 1
-      @player1 = Player.new($name1, :'1', @board)
-      @player2 = CPU.new('Computer', :'2', @board)
+      @player1 = Player.new($name1, "1", @board)
+      @player2 = CPU.new('Computer', "2", @board)
       @current_player = @player2
       File.write('game.txt', 1)
     # two player mode
     elsif $game_type == 2
-      @player1 = Player.new($name1, :'1', @board)
-      @player2 = Player.new($name2, :'2', @board)
+      @player1 = Player.new($name1, "1", @board)
+      @player2 = Player.new($name2, "2", @board)
       @current_player = @player1
       File.write('game.txt', 2)
+    # load previous save
     elsif $game_type == 3
-        players = File.open('game.txt')
-        if players == 1
-            @player1 = Player.new($name1, :'1', @board)
-            @player2 = CPU.new('Computer', :'2', @board)
-            @current_player = @player2     
-        elsif players == 2
-            @player1 = Player.new($name1, :'1', @board)
-            @player2 = Player.new($name2, :'2', @board)
-            @current_player = @player1
+        game_val = File.read("game.txt").to_i
+        player_val = File.read("player.txt").to_i
+        if game_val == 1
+            @player1 = Player.new($name1, "1", @board)
+            @player2 = CPU.new('Computer', "2", @board)
+            if player_val == 1
+                @current_player = @player1
+            else
+                @current_player = @player2
+            end
+        elsif game_val == 2
+            @player1 = Player.new($name1, "1", @board)
+            @player2 = Player.new($name2, "2", @board)
+            if player_val == 1
+                @current_player = @player1
+            else
+                @current_player = @player2
+            end
         end
     end
   end
@@ -132,6 +143,7 @@ class C4Game
       display_win if @board.win?(@current_player.piece)
       # check if move is a draw and display a draw message if it is
       display_draw if @board.draw?
+      break if $win == 1
       # change current player
       change_turn(@current_player)
     end
@@ -141,8 +153,10 @@ class C4Game
   def change_turn(current_player)
     if current_player == @player1
       @current_player = @player2
+      File.write('player.txt', 2)
     elsif current_player == @player2
       @current_player = @player1
+      File.write('player.txt', 1)
     end
   end
 
@@ -151,7 +165,8 @@ class C4Game
     puts "\nIt's a draw!"
     puts 'Press any key to restart game!'
     gets
-    game_reset
+    # game_reset
+    $win = 1
   end
 
   def display_win
@@ -159,11 +174,12 @@ class C4Game
     puts "\n#{@current_player.name} WINS!"
     puts 'Press any key to restart game!'
     gets
-    game_reset
+    # game_reset
+    $win = 1
   end
 
   def game_reset
-    Board.new($colour1, $colour2)
+    @Board = Board.new($colour1, $colour2)
     game_view = GameView.new
     restart = MainMenu.new(game_view)
     restart.game_setup

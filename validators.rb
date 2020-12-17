@@ -14,8 +14,8 @@ module Validators
   def self.validate_option(input)
     # convert input to integer
     num_input = input.to_i
-    # if integer == 1..4 return true
-    if num_input > 0 && num_input <= 4
+    # if integer == 1..5 return true
+    if num_input > 0 && num_input <= 5
       true
     # else return false
     else
