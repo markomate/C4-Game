@@ -9,7 +9,8 @@ class Player
 
   # method for asking for a move, validating it is an option then returning user input
   def ask_move
-    puts "\n#{@name} please enter a move:"
+    puts ""
+    print "\n#{@name} please enter a move: "
     input = gets.to_i
     input_valid = Validators.validate_column(input)
     if !input_valid

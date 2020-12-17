@@ -11,6 +11,13 @@ class Board
 
   # setting up the game board
   def empty_board
+    if $game_type == 3
+      saved_array = []
+      File.readlines('board.txt').map do |line|
+        saved_array << line.split.map(&:to_i)
+      end
+      return saved_array
+    else
     Array[
       %w[O O O O O O O],
       %w[O O O O O O O],
@@ -19,10 +26,22 @@ class Board
       %w[O O O O O O O],
       %w[O O O O O O O],
     ]
+    end
   end
 
   # method for displaying the board to the player/s
   def render
+    # saves the array into a txt file
+      File.write('board.txt', '')
+    for i in 0..5 do
+      File.open('board.txt', "a") {|w| w.write "#{@board[i]}\n"}
+    end
+    # File.open('board.txt', "w") {|i| i.write @board[1]}
+    # File.open('board.txt', "w") {|i| i.write @board[2]}
+    # File.open('board.txt', "w") {|i| i.write @board[3]}
+    # File.open('board.txt', "w") {|i| i.write @board[4]}
+    # File.open('board.txt', "w") {|i| i.write @board[5]}
+
     # clears the screen before rendering
     system('clear')
     # iterates through every variable in the array
@@ -113,12 +132,15 @@ class Board
   end
 
   def four_in_row(piece)
+    # iterates through every object in the array and counts current players piece 
     @board.each do |x|
+      # count resets after every row
       count = 0
       x.each do |cell|
         if cell == piece
           count += 1
         else
+          # count resets if piece isn't the current players
           count = 0
         end
         return true if count == 4
@@ -128,9 +150,12 @@ class Board
   end
 
   def four_in_column(piece)
+    # goes through every column
     (0..6).each do |i|
+      # reset count with every column
       count = 0
       @board.each_with_index do |_value, index|
+        # starts at @board[0][0] and counts if piece is current players then goes up a row
         if @board[index][i] == piece
           count += 1
         else
@@ -143,14 +168,17 @@ class Board
   end
 
   def four_acending_left(piece)
+    # starts at @board[5][6] which is the bottom right corner of the board
     row = 5
     column = 6
     piece_count = 0
     while row < @board.size && row >= 0 && column < @board[row].size && column >= 0
+      # if @board[5][6] is current players piece, count +1 and check @board[4][5]
       if @board[row][column] == piece
         piece_count += 1
         column -= 1
         row -= 1
+      # if not go to @board[4][5] and repeat check
       else
         piece_count = 0
         column -= 1
@@ -164,14 +192,17 @@ class Board
   end
 
   def four_acending_right(piece)
+    # starts at @board[5][0] which is the bottom left corner of the board
     row = 5
     column = 0
     count = 0
     while row < @board.size && row >= 0 && column < @board[row].size && column >= 0
+      # if @board[5][0] is current players piece, count +1 and check @board[4][1]
       if @board[row][column] == piece
         count += 1
         column += 1
         row -= 1
+        # if not go to @board[5][1] and repeat check
       else
         count = 0
         column += 1

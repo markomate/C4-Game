@@ -34,8 +34,9 @@ class MainMenu
       end
       $game_type = 1 if input == 1
       $game_type = 2 if input == 2
-      game_options if input == 3
-      exit if input == 4
+      $game_type = 3 if input == 3
+      game_options if input == 4
+      exit if input == 5
     end
 
     def game_options
@@ -55,6 +56,7 @@ class MainMenu
       end
       colour_selector if input == 2
       game_setup if input == 3
+      exit if input == 4
     end
 
     def colour_selector
@@ -75,6 +77,13 @@ class MainMenu
       end
       $colour1 = colour1.to_sym
       $colour2 = colour2.to_sym
+      # if nothing is entered, reset to default colour
+      if colour1 == ''
+        $colour1 = :red
+      end
+      if colour2 == ''
+        $colour2 = :yellow
+      end
       game_options
     end
 
@@ -84,17 +93,31 @@ end
 
 class C4Game
   def initialize
+    # creates a new board with chosen piece colours
     @board = Board.new($colour1, $colour2)
-
+    # single player mode
     if $game_type == 1
       @player1 = Player.new($name1, :'1', @board)
       @player2 = CPU.new('Computer', :'2', @board)
       @current_player = @player2
-
+      File.write('game.txt', 1)
+    # two player mode
     elsif $game_type == 2
       @player1 = Player.new($name1, :'1', @board)
       @player2 = Player.new($name2, :'2', @board)
       @current_player = @player1
+      File.write('game.txt', 2)
+    elsif $game_type == 3
+        players = File.open('game.txt')
+        if players == 1
+            @player1 = Player.new($name1, :'1', @board)
+            @player2 = CPU.new('Computer', :'2', @board)
+            @current_player = @player2     
+        elsif players == 2
+            @player1 = Player.new($name1, :'1', @board)
+            @player2 = Player.new($name2, :'2', @board)
+            @current_player = @player1
+        end
     end
   end
 

@@ -15,6 +15,7 @@ class GameView
     puts "\n1. Name change"
     puts '2. Colour selector'
     puts '3. Back'
+    puts '4. Exit'
   end
 
   def game_setup
