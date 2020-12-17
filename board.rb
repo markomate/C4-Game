@@ -12,8 +12,8 @@ class Board
 
   # setting up the game board
   def empty_board
-    # loads saved array instead of empty if selected
-    if $game_type == 3
+    # loads saved array instead of empty if selected in main menu
+    if $game_type == 3 && $reset_game == 0
       saved_array = YAML.load(File.read("board.yml"))
       return saved_array
     else
@@ -146,7 +146,7 @@ class Board
     (0..6).each do |i|
       # reset count with every column
       count = 0
-      @board.each_with_index do |_value, index|
+      @board.each_with_index do |value, index|
         # starts at @board[0][0] and counts if piece is current players then goes up a row
         if @board[index][i] == piece
           count += 1

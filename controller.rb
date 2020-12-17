@@ -6,7 +6,6 @@ $colour2 = :yellow
 # default names
 $name1 = 'Player 1'
 $name2 = 'Player 2'
-$win = 0
 
 class MainMenu
   def initialize(game_view)
@@ -135,6 +134,7 @@ class C4Game
   # method for running the game, which is a loop
   def run
     loop do
+      $reset_game = 0
       # display the board
       @board.render
       # get a move from the current player
@@ -143,9 +143,10 @@ class C4Game
       display_win if @board.win?(@current_player.piece)
       # check if move is a draw and display a draw message if it is
       display_draw if @board.draw?
-      break if $win == 1
       # change current player
       change_turn(@current_player)
+      # break the loop if there's a win or draw
+      break if $loop_break == 1
     end
   end
 
@@ -165,8 +166,9 @@ class C4Game
     puts "\nIt's a draw!"
     puts 'Press any key to restart game!'
     gets
-    # game_reset
-    $win = 1
+    game_reset
+    $loop_break = 1
+    $reset_game = 1
   end
 
   def display_win
@@ -174,14 +176,12 @@ class C4Game
     puts "\n#{@current_player.name} WINS!"
     puts 'Press any key to restart game!'
     gets
-    # game_reset
-    $win = 1
+    game_reset
+    $loop_break = 1
+    $reset_game = 1
   end
 
   def game_reset
-    @Board = Board.new($colour1, $colour2)
-    game_view = GameView.new
-    restart = MainMenu.new(game_view)
-    restart.game_setup
+    C4Game.new
   end
 end
