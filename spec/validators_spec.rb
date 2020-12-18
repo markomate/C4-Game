@@ -7,6 +7,6 @@ describe 'Validators.validate_option' do
     expect(Validators.validate_option("3")).to eq(true)
     expect(Validators.validate_option("4")).to eq(true)
 
-    expect(Validators.validate_option("6")).to eq(true)
+    expect(Validators.validate_option("6")).to eq(false)
   end
 end

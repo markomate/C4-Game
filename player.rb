@@ -1,22 +1,28 @@
-class Player
-  attr_accessor :name, :piece, :board
+require 'colorize'
 
-  def initialize(name, piece, board)
+class Player
+  attr_accessor :name, :piece, :board, :colour
+
+  def initialize(name, piece, board, colour)
     @name = name
     @piece = piece
     @board = board
+    @colour = colour
   end
 
   # method for asking for a move, validating it is an option then returning user input
   def ask_move
     puts ""
-    print "\n#{@name} please enter a move: "
-    input = gets.to_i
+    print "\n#{@name}".colorize(@colour)
+    print " please enter a move: "
+    input = gets.chomp
     input_valid = Validators.validate_column(input)
     if !input_valid
       puts 'Invalid input, try again!'
       ask_move
-    else input
+    elsif input == "E"
+      $loop_break = 1
+    else input.to_i
     end
   end
 

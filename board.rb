@@ -13,7 +13,7 @@ class Board
   # setting up the game board
   def empty_board
     # loads saved array instead of empty if selected in main menu
-    if $game_type == 3 && $reset_game == 0
+    if $game_type == 3
       saved_array = YAML.load(File.read("board.yml"))
       return saved_array
     else
@@ -33,7 +33,7 @@ class Board
     # saves the array into a txt file
     File.open("board.yml", "w") { |file| file.write(@board.to_yaml) }
     # clears the screen before rendering
-    system('clear')
+    # system('clear')
     # iterates through every variable in the array
     puts ' _____________'.colorize(:blue)
     @board.each do |x|

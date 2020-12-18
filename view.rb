@@ -12,10 +12,6 @@ class GameView
     c4_text = Artii::Base.new font: 'slant'
     puts c4_text.asciify('OPTIONS').colorize(:blue)
     puts "\nSelect from the following options:"
-    puts "\n1. Name change"
-    puts '2. Colour selector'
-    puts '3. Back'
-    puts '4. Exit'
   end
 
   def game_setup
