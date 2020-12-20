@@ -14,7 +14,7 @@ class Player
   def ask_move
     puts ''
     print "\n#{@name}".colorize(@colour)
-    print ' please enter a move: '
+    print " please enter a move or 'E' to exit: "
     input = gets.chomp
     input_valid = Validators.validate_column(input)
     if !input_valid

@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 require_relative 'view'
 require_relative 'controller'
 require_relative 'player'
