@@ -15,6 +15,7 @@ class MainMenu
 
   def run
     def welcome
+      system('clear')
       @game_view.welcome_text
       input = gets.chomp.to_s
       if input == '-h'
@@ -28,24 +29,25 @@ class MainMenu
     def game_setup
       prompt = TTY::Prompt.new
       @setup_prompt = [
-        {"Single Player" => -> do $game_type = 1 end},
-        {"Two Player (2P)" => -> do $game_type = 2 end}, 
-        {"Load saved game" => -> do $game_type = 3 end}, 
-        {"Options" => -> do game_options end}, 
-        {"Exit" => -> do exit end}
+        { 'Single Player' => -> do $game_type = 1 end },
+        { 'Two Player (2P)' => -> do $game_type = 2 end },
+        { 'Load saved game' => -> do $game_type = 3 end },
+        { 'Options' => -> do game_options end },
+        { 'Exit' => -> do exit end }
       ]
-      prompt.select("Select from the following options:\n", @setup_prompt)
+      prompt.select("\nSelect from the following options:\n", @setup_prompt)
     end
 
     def game_options
+      system('clear')
       prompt = TTY::Prompt.new
       @options_prompt = [
-        {"Name changer" => -> do name_options end},
-        {"Colour selector" => -> do colour_selector end}, 
-        {"Back" => -> do game_setup end}, 
-        {"Exit" => -> do exit end}
+        { 'Name changer' => -> do name_options end },
+        { 'Colour selector' => -> do colour_selector end },
+        { 'Back' => -> do game_setup end },
+        { 'Exit' => -> do exit end }
       ]
-      prompt.select("#{@game_view.options_text}", @options_prompt)
+      prompt.select(@game_view.options_text.to_s, @options_prompt)
     end
 
     def name_options
@@ -75,12 +77,8 @@ class MainMenu
       $colour1 = colour1.to_sym
       $colour2 = colour2.to_sym
       # if nothing is entered, reset to default colour
-      if colour1 == ''
-        $colour1 = :red
-      end
-      if colour2 == ''
-        $colour2 = :yellow
-      end
+      $colour1 = :red if colour1 == ''
+      $colour2 = :yellow if colour2 == ''
       game_options
     end
     welcome
@@ -93,54 +91,55 @@ class C4Game
     @board = Board.new($colour1, $colour2)
     # single player mode
     if $game_type == 1
-      @player1 = Player.new($name1, "1", @board, $colour1)
-      @player2 = CPU.new('Computer', "2", @board, $colour2)
+      @player1 = Player.new($name1, '1', @board, $colour1)
+      @player2 = CPU.new('Computer', '2', @board, $colour2)
       @current_player = @player2
-      File.write('game.txt', 1)
+      File.write('saves/game_type.txt', 1)
     # two player mode
     elsif $game_type == 2
-      @player1 = Player.new($name1, "1", @board, $colour1)
-      @player2 = Player.new($name2, "2", @board, $colour2)
+      @player1 = Player.new($name1, '1', @board, $colour1)
+      @player2 = Player.new($name2, '2', @board, $colour2)
       @current_player = @player1
-      File.write('game.txt', 2)
+      File.write('saves/game_type.txt', 2)
     # load previous save
     elsif $game_type == 3
+      # check the last games state
+      game_state = File.read('saves/game_state.txt').to_i
       # if the previous game isn't a win/draw
-      if $reset_game == 0
+      if game_state == 0
         # get the game type and current player from last game
-        game_val = File.read("game.txt").to_i
-        player_val = File.read("player.txt").to_i
+        game_type = File.read('saves/game_type.txt').to_i
+        player = File.read('saves/player.txt').to_i
 
-        if game_val == 1
-            @player1 = Player.new($name1, "1", @board, $colour1)
-            @player2 = CPU.new('Computer', "2", @board, $colour2)
-            if player_val == 1
-                @current_player = @player1
-            else
-                @current_player = @player2
-            end
-        elsif game_val == 2
-            @player1 = Player.new($name1, "1", @board, $colour1)
-            @player2 = Player.new($name2, "2", @board, $colour2)
-            if player_val == 1
-                @current_player = @player1
-            else
-                @current_player = @player2
-            end
+        if game_type == 1
+          @player1 = Player.new($name1, '1', @board, $colour1)
+          @player2 = CPU.new('Computer', '2', @board, $colour2)
+          @current_player = if player == 1
+                              @player1
+                            else
+                              @player2
+                            end
+        elsif game_type == 2
+          @player1 = Player.new($name1, '1', @board, $colour1)
+          @player2 = Player.new($name2, '2', @board, $colour2)
+          @current_player = if player == 1
+                              @player1
+                            else
+                              @player2
+                            end
         end
-        # else start new game
-      else 
-        puts "There is no saved game to load."
-        print "\nStarting new game! Would you like to play single or 2P mode?(1-2): "
-        gets
+      else
+        puts 'There is no saved game to load.'
+        exit
       end
     end
   end
 
-  # method for running the game, which is a loop
+  # method containing the game loop
   def run
     loop do
-      $reset_game = 0
+      # game state variable for the save feature
+      File.write('saves/game_state.txt', 0)
       # display the board
       @board.render
       # get a move from the current player
@@ -152,7 +151,8 @@ class C4Game
       # change current player
       change_turn(@current_player)
       # break the loop if there's a win or draw
-      break if $loop_break == 1
+      game_state = File.read('saves/game_state.txt').to_i
+      break if game_state == 1 || $loop_break == 1
     end
   end
 
@@ -160,33 +160,36 @@ class C4Game
   def change_turn(current_player)
     if current_player == @player1
       @current_player = @player2
-      File.write('player.txt', 2)
+      # player variable for the save feature
+      File.write('saves/player.txt', 1)
     elsif current_player == @player2
       @current_player = @player1
-      File.write('player.txt', 1)
+      File.write('saves/player.txt', 2)
     end
   end
 
   def display_draw
+    # game state variable for the save feature
+    File.write('saves/game_state.txt', 1)
     @board.render
+    puts ""
     puts "\nIt's a draw!"
     puts 'Press ENTER to return to menu!'
     gets
-    $loop_break = 1
-    $reset_game = 1
   end
 
   def display_win
+    # game state variable for the save feature
+    File.write('saves/game_state.txt', 1)
     @board.render
+    puts ""
     print "\n#{@current_player.name} ".colorize(@current_player.colour)
-    print  "WINS!"
+    print 'WINS!'
     puts "\nPress ENTER to return to menu!"
     gets
-    $loop_break = 1
-    $reset_game = 1
   end
 
-  def game_reset
-    C4Game.new
-  end
+  # def game_reset
+  #   C4Game.new
+  # end
 end

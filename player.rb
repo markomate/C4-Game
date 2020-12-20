@@ -12,21 +12,19 @@ class Player
 
   # method for asking for a move, validating it is an option then returning user input
   def ask_move
-    puts ""
+    puts ''
     print "\n#{@name}".colorize(@colour)
-    print " please enter a move: "
+    print ' please enter a move: '
     input = gets.chomp
     input_valid = Validators.validate_column(input)
     if !input_valid
       puts 'Invalid input, try again!'
       ask_move
-    elsif input == "E"
-      $loop_break = 1
     else input.to_i
     end
   end
 
-  # method with a loop that breaks after checking the move with the board class
+  # method with a loop that breaks after checking the move with the board
   def get_move(column = nil)
     loop do
       column = ask_move

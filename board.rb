@@ -14,35 +14,35 @@ class Board
   def empty_board
     # loads saved array instead of empty if selected in main menu
     if $game_type == 3
-      saved_array = YAML.load(File.read("board.yml"))
-      return saved_array
+      YAML.load(File.read('saves/board.yml'))
+
     else
-    Array[
-      %w[0 0 0 0 0 0 0],
-      %w[0 0 0 0 0 0 0],
-      %w[0 0 0 0 0 0 0],
-      %w[0 0 0 0 0 0 0],
-      %w[0 0 0 0 0 0 0],
-      %w[0 0 0 0 0 0 0],
-    ]
+      Array[
+        %w[0 0 0 0 0 0 0],
+        %w[0 0 0 0 0 0 0],
+        %w[0 0 0 0 0 0 0],
+        %w[0 0 0 0 0 0 0],
+        %w[0 0 0 0 0 0 0],
+        %w[0 0 0 0 0 0 0],
+      ]
     end
   end
 
   # method for displaying the board to the player/s
   def render
     # saves the array into a txt file
-    File.open("board.yml", "w") { |file| file.write(@board.to_yaml) }
+    File.open('saves/board.yml', 'w') { |file| file.write(@board.to_yaml) }
     # clears the screen before rendering
-    # system('clear')
+    system('clear')
     # iterates through every variable in the array
     puts ' _____________'.colorize(:blue)
     @board.each do |x|
       print '|'.colorize(:blue)
       x.each do |cell|
-        if cell == "1"
+        if cell == '1'
           print '●'.colorize(@colour1)
           print '|'.colorize(:blue)
-        elsif cell == "2"
+        elsif cell == '2'
           print '●'.colorize(@colour2)
           print '|'.colorize(:blue)
         else
@@ -70,17 +70,17 @@ class Board
   def drop_piece(coulmn, piece)
     x = coulmn
     x -= 1
-    if @board[5][x] == "0"
+    if @board[5][x] == '0'
       @board[5][x] = piece
-    elsif @board[4][x] == "0"
+    elsif @board[4][x] == '0'
       @board[4][x] = piece
-    elsif @board[3][x] == "0"
+    elsif @board[3][x] == '0'
       @board[3][x] = piece
-    elsif @board[2][x] == "0"
+    elsif @board[2][x] == '0'
       @board[2][x] = piece
-    elsif @board[1][x] == "0"
+    elsif @board[1][x] == '0'
       @board[1][x] = piece
-    elsif @board[0][x] == "0"
+    elsif @board[0][x] == '0'
       @board[0][x] = piece
     end
   end
@@ -89,9 +89,7 @@ class Board
   def check_room?(column)
     x = column
     x -= 1
-    if @board[0][x] == "0"
-      return true
-    end
+    return true if @board[0][x] == '0'
   end
 
   # method to place piece after confirming it is empty, returns true if placed or false if unable
@@ -108,7 +106,7 @@ class Board
 
   def draw?
     # checks board if there are any empty slots and returns true if board is full
-    if @board[0][0] != "0" && @board[0][1] != "0" && @board[0][2] != "0" && @board[0][3] != "0" && @board[0][4] != "0" && @board[0][5] != "0" && @board[0][6] != "0"
+    if @board[0][0] != '0' && @board[0][1] != '0' && @board[0][2] != '0' && @board[0][3] != '0' && @board[0][4] != '0' && @board[0][5] != '0' && @board[0][6] != '0'
       true
     else
       false
@@ -124,7 +122,7 @@ class Board
   end
 
   def four_in_row(piece)
-    # iterates through every object in the array and counts current players piece 
+    # iterates through every object in the array and counts current players piece
     @board.each do |x|
       # count resets after every row
       count = 0
@@ -146,7 +144,7 @@ class Board
     (0..6).each do |i|
       # reset count with every column
       count = 0
-      @board.each_with_index do |value, index|
+      @board.each_with_index do |_value, index|
         # starts at @board[0][0] and counts if piece is current players then goes up a row
         if @board[index][i] == piece
           count += 1

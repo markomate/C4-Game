@@ -25,9 +25,10 @@ class GameView
 
   def game_help
     puts 'How to play:'
-    puts 'Players take turns placing a piece down a column by typing 1-7.'
+    puts "\nPlayers take turns placing a piece down a column by typing 1-7."
+    puts "\nYou may exit to the main menu at any time by entering 'E'"
     puts 'The aim of the game is to connect four pieces, either in a row, column or diagonally.'
-    puts "That's really all there is to it, enjoy :)!"
+    puts "\nThat's really all there is to it, enjoy :)!"
   end
 
   def error_msg
