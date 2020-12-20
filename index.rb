@@ -8,7 +8,8 @@ if ARGV.length.positive?
   # help command line argument
   if ARGV[0] == '-h' || ARGV[0] == '--help'
     # prints help menu
-    puts 'you asked for help'
+    puts 'Please check out the README file for dependancies and system requirements.'
+    puts "\nFor game help, check out the help menu in game by entering -h at the welcome screen"
   end
 else
   # run the code

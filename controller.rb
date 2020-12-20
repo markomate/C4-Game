@@ -1,12 +1,17 @@
 require './validators'
 require 'tty-prompt'
 
-# default colours for pieces
+# default name and colour
 $colour1 = :red
 $colour2 = :yellow
-# default names
 $name1 = 'Player 1'
 $name2 = 'Player 2'
+# saved name and colour
+$name1 = File.read('saves/name1.txt')
+$name2 = File.read('saves/name2.txt')
+$colour1 = File.read('saves/colour1.txt').to_sym
+$colour2 = File.read('saves/colour2.txt').to_sym
+
 
 class MainMenu
   def initialize(game_view)
@@ -31,7 +36,7 @@ class MainMenu
       @setup_prompt = [
         { 'Single Player' => -> do $game_type = 1 end },
         { 'Two Player (2P)' => -> do $game_type = 2 end },
-        { 'Load saved game' => -> do $game_type = 3 end },
+        { 'Load saved game' => -> do game_check end },
         { 'Options' => -> do game_options end },
         { 'Exit' => -> do exit end }
       ]
@@ -50,11 +55,26 @@ class MainMenu
       prompt.select(@game_view.options_text.to_s, @options_prompt)
     end
 
+    def game_check
+      game_state = File.read('saves/game_state.txt').to_i
+      # if the previous game isn't a win/draw
+      if game_state == 0
+        $game_type = 3
+        
+      else
+        puts "\nThere is no saved game to load! Please press ENTER to return to menu"
+        gets
+        game_setup
+      end
+    end
+
     def name_options
       print "\nEnter Player 1's name: "
       $name1 = gets.chomp
+      File.write('saves/name1.txt', $name1)
       print "\nEnter Player 2's name: "
       $name2 = gets.chomp
+      File.write('saves/name2.txt', $name2)
       game_options
     end
 
@@ -79,6 +99,9 @@ class MainMenu
       # if nothing is entered, reset to default colour
       $colour1 = :red if colour1 == ''
       $colour2 = :yellow if colour2 == ''
+      # save to txt file for save/load feature
+      File.write('saves/colour1.txt', $colour1)
+      File.write('saves/colour2.txt', $colour2)
       game_options
     end
     welcome
@@ -103,11 +126,7 @@ class C4Game
       File.write('saves/game_type.txt', 2)
     # load previous save
     elsif $game_type == 3
-      # check the last games state
-      game_state = File.read('saves/game_state.txt').to_i
-      # if the previous game isn't a win/draw
-      if game_state == 0
-        # get the game type and current player from last game
+        # get the game type and current player from last game as well as their name and colour
         game_type = File.read('saves/game_type.txt').to_i
         player = File.read('saves/player.txt').to_i
 
@@ -128,10 +147,6 @@ class C4Game
                               @player2
                             end
         end
-      else
-        puts 'There is no saved game to load.'
-        exit
-      end
     end
   end
 
@@ -188,8 +203,4 @@ class C4Game
     puts "\nPress ENTER to return to menu!"
     gets
   end
-
-  # def game_reset
-  #   C4Game.new
-  # end
 end

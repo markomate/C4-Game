@@ -1,3 +1,5 @@
+require 'rspec'
+
 module Validators
   def self.validate_column(input)
     # check input for exit command

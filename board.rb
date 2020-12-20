@@ -15,7 +15,6 @@ class Board
     # loads saved array instead of empty if selected in main menu
     if $game_type == 3
       YAML.load(File.read('saves/board.yml'))
-
     else
       Array[
         %w[0 0 0 0 0 0 0],
